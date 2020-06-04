@@ -1,0 +1,78 @@
+\section{Variations}
+\label{sec:variations}
+\subsection{MCTS in Games}
+\subsection{Real Time MCTS}
+\subsection{Heuristics}
+\subsection{Planning}
+\paragraph{Decentralized, Multi-Agent Planning}
+In the context of robot move planning \cite{best2019dec} proposes a variation of MCTS that is both decentralized and online called \textit{Dec-MCTS}. Each robot is part of a joint action space, it optimizes its own planning locally via a probabilistic distribution over all plans and periodically exchanges its search tree with other robots in a compressed version. This information is then used to update its own plans (i.e., the distribution thereof). To this end, they also define a new tree expansion policy called \textit{D-UCT} which is, in turn, a generalization of \textit{D-UCB} \cite{garivier2011upper}.
+\todo{content}
+\paragraph{Hierarchical Planning}
+\cite{vien2015hierarchical} adapt MCTS to efficiently scale to large domains. Basic, that is flat, MCTS requires the explicit search for (many) reward states potentially located very far from the root node. This consumes a lot of computing resources To reduce the required effort we can exploit possible hierarchical structures of the domain called subtasks. The idea is to compute policies for whole subtasks purely based on sampling.
+\todo{content}
+\paragraph{MCTS-Alternative}
+MCTS explores the most promising paths through game trees via policy-guided simulation (\textit{the default policy}). To adapt future searches certain pieces of data (i.e., monte carlo averages) need to be stored in the tree's nodes. In domains with a high branching factor this does not scale well. \cite{anthony2019policy} proposes a new search method called Policy Gradient Search (PGS). While this is also simulation-based the simulation is being done via a neural network and is adapted via online policy gradient updates. So no search tree is needed.
+\todo{content}
+\subsection{MAB and UCB-Tuning}
+\paragraph{Contexts} 
+\cite{slivkins2014contextual}
+In a multi-armed bandit (MAB) problem, an online algorithm makes a sequence of choices. In each round it chooses from a time-invariant set of alternatives and receives the payoff associated with this alternative. While the case of small strategy sets is by now well understood, a lot of recent work has focused on MAB problems with exponentially or infinitely large strategy sets, where one needs to assume extra structure in order to make the problem tractable. In particular, recent literature considered information on similarity between arms.
+We consider similarity information in the setting of contextual bandits, a natural extension of the basic MAB problem where before each round an algorithm is given the context -a hint about the payoffs in this round. Contextual bandits are directly motivated by placing advertisements on web pages, one of the crucial problems in sponsored search. A particularly simple way to represent similarity information in the contextual bandit setting is via a similarity distance between the context-arm pairs which bounds from above the difference between the respective expected payoffs.
+\todo{abstract, content}
+\paragraph{Stochastics}
+\cite{kaufmann2017monte}
+We study the game tree search problem, where the goal is to quickly identify the optimal move in a given game tree by sequentially sampling its stochastic payoffs. We develop new algorithms for trees of arbitrary depth, that operate by summarizing all deeper levels of the tree into confidence intervals at depth one, and applying a best arm identification procedure at the root. We prove new sample complexity guarantees with a refined dependence on the problem instance.
+\todo{abstract,content}
+\paragraph{Fixed Budgets}
+The \textit{fixed budget} setting (as opposed to \textit{fixed confidence}) describes the constraint of a MAB-problem that the best possible arm must be identified using no more than $m$ \enquote{pulls}.
+\cite{karnin2013almost} provides an almost optimal exploration algorithm in this setting called \textit{Sequential Halving} given in Algorithm \ref{alg:sequential_halving} . W.l.o.g the $k$ different arms are ordered according to their expected value $p_i$ at every decision epoch $t$: $p_1, \geq p_2 \geq \ldots \geq p_k$. $\Delta_i \coloneqq p_1 - p_i$ denotes the suboptimality gap of arm $i$. Consequently, $\Delta_2$ is the smallest of all these gaps. It can be shown that for the required budget $T$ for identifying the best arm with a probability of at least $(1-\delta)$ we have $T \in \Omega(H \log (\frac{1}{\delta}))$ where $H \coloneqq \sum_{i=2}^{k} \frac{1}{\Delta_i^2}$. $H$ is a measure of the complexity of the problem. Another related measure is given via: $H_2 \coloneqq \max_{i \neq 1} \frac{i}{\Delta_i^2}$. With these considerations we can now analyse the algorithm: Given a budget of $T$ pulls it identifies the best arm with a probability of at least $1-3 \log_2 k \cdot \exp \left(-\frac{T}{8H_2 \log_2 k}\right)$. 
+
+\begin{algorithm}[htbp]
+\begin{algorithmic}
+\Function{SequentialHalving}{$T$} 
+    \State $S_0 \gets [k]$
+    \For{$r = 0$ to $\ceil*{\log_2 k} - 1$}
+    \State $t_r = \floor*{\frac{T}{\left|S_r\right| \ceil*{log_2 k}}}$
+    \State sample every arm $i \in S_r$ $t_r$ times
+    \State calculate average reward $\Hat{p}_i^r$
+    \State $S_{r+1} \gets \ceil*{\frac{\left| S_r \right|}{2}}$ arms in $S_r$ with largest average reward
+    \EndFor
+    \State \Return arm in $S_{\ceil*{\log_2 k}}$
+\EndFunction
+\end{algorithmic}
+\caption{Sequential Halving.}
+\label{alg:sequential_halving}
+\end{algorithm}
+
+\paragraph{Fixed Confidence}
+\cite{jamieson2014lil} devises an optimal exploration algorithm called LIL'UCB for stochastic MAB-problems with a \textit{fixed confidence}. More precisely they define, a procedure with a single input $\delta > 0$ that solves the best arm problem with a confidence of $\delta$. That is, it identifies the arm with the largest mean with a probability of at least $1-\delta$ irrespective of the actual mean payoff of the arms $\mu_1,\ldots,\mu_K \in [0,1]$. A key concept here is the \textit{sampling} of arms i.e., the realization of a Gaussian random variable with mean $\mu_i$ for arm $i$. Let $X_{i,s}$ denote independent samples from arm $i$ and let $T_i(t)$ denote the number of samples arm $i$ has been sampled up to time $t$. Then the empirical mean of these samples can be written as
+\begin{equation*}
+    \Hat{\mu}_{i,T_i(t)} \coloneqq \frac{1}{T_i(t)}\sum_{s=1}^{T_i(t)} X_{i,s}
+\end{equation*}
+Now the problem can be solved as follows: Initially, sample each arm once, giving us $T_i(t) = 1$ for every arm $i$ and $t = k$. Then, while it holds that $T_i(t) < 1 + \lambda \sum_{j\neq i} T_j(t)$ for all $i$, sample arm $I_t$ with
+\begin{equation*}
+    I_t = \underset{i \in \{1,\ldots,k\}}{\arg \max} \left\{ \Hat{\mu}_{i,T_i(t)} + (1+\beta)(1+\sqrt{\epsilon}) \sqrt{\frac{2\sigma^2 (1+\epsilon) \log \left(\frac{\log((1+\epsilon)T_i(t))}{\delta}\right)}{T_i(t)}}\right\}\text{.}
+\end{equation*}
+Set $T_i(t+1) = T_i(t) + 1$ if $I_t = i$, otherwise $T_i(t+1) = T_i(t)$. If the condition above no longer holds, stop and yield ${\arg \max}_{i \in \{ 1,\ldots,k\}} T_i(t)$ as output. Using the \textit{law of iterated logarithms} (LIL) they prove that this procedure cannot be improved by more than a constant factor.  
+\todo{move to non-stationary?}
+\paragraph{Combinatorial Exploration} \cite{chen2014combinatorial}
+\paragraph{Non-Stationary} \cite{auer2002finite} prove a lower bound for policy performance for non-stationary MAB-problems. If at each decision epoch $t$ the rewards $X_t^k$ are distributed via a Bernoulli distribution with mean $\mu_t^k$ we have for any policy $\pi$:
+\begin{equation*}
+    \mathcal{R}^\pi(V_T,T) \geq CK^{\frac{1}{3}}V_T^{\frac{1}{3}}T^{\frac{2}{3}}
+\end{equation*}
+\cite{besbes2019optimal} provide a policy with this optimal bound called \textit{Rexp3}. Concretely, it defines a distribution over the $K$ arms $\{p_t^k\}_{k=1}^K$ with
+\begin{equation*}
+    p_t^k = (1-\gamma)\frac{w_t^k}{\sum_{k'=1}^K w^{k'}_t} +\frac{\gamma}{K}
+\end{equation*} according to which the arms are drawn. Their weights are then updated as follows:
+\begin{equation*}
+    w_{t+1}^k = w_t^k \exp{\left\{\frac{\gamma \Hat{X}_t^k}{K}\right\}}
+\end{equation*}
+with $\Hat{X}_t^{k'} = \frac{X_t^{k'}}{p_t^{k'}}$. The value of the parameter $\gamma$ is given via $\gamma = \min \left\{1, \sqrt{\frac{K \log K}{(e-1)\Delta}} \right\}$. The additional parameter $\Delta$ in this definition refers to the batch-size. That is, $\gamma$ is updated every $\Delta = \ceil*{(K \log K)^\frac{1}{3} (\frac{T}{V_T})^\frac{2}{3}}$ epochs. Intuitively, $\gamma$ represents the exploration rate and $p_t^k$ represents the certainty of the policy that $k$ is optimal. 
+\subsection{Evolutionary Algorithms}
+\cite{benbassat2014evomcts}
+We present the application of genetic programming as a generic game learning approach to zero-sum, deterministic, full-knowledge board games by evolving board-state evaluation functions to be used in conjunction with Monte Carlo Tree Search (MCTS). Our method involves evolving board-evaluation functions that are then used to guide the MCTS playout strategy. We examine several variants of Reversi, Dodgem, and Hex using strongly typed genetic programming, explicitly defined introns, and a selective directional crossover method. Our results show a proficiency that surpasses that of baseline handcrafted players using equal and in some cases a greater amount of search, with little domain knowledge and no expert domain knowledge. Moreover, our results exhibit scalability.
+\todo{abstract, content}
+
+\cite{lucas2014fast} This paper describes a new adaptive Monte Carlo Tree Search (MCTS) algo- rithm that uses evolution to rapidly optimise its performance. An evolutionary algorithm is used as a source of control parameters to modify the behaviour of each iteration (i.e. each simulation or roll-out) of the MCTS algorithm; in this paper we largely restrict this to modifying the behaviour of the random default policy, though it can also be applied to modify the tree policy.
+This method of tightly integrating evolution into the MCTS algorithm means that evolutionary adaptation occurs on a much faster time-scale than has previously been achieved, and addresses a particular problem with MCTS which frequently occurs in real-time video and control problems: that uniform random roll-outs may be uninformative.
+\todo{abstract, content}

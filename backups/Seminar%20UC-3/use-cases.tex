@@ -1,0 +1,28 @@
+\section{Use Cases}
+\label{sec:use_cases}
+Due to its proximity to games and machine learning (MCTS can be viewed as a reinforcement learning algorithm) Monte Carlo Tree Search is widely applied to these two fields, some notable examples are detailed in the next two sections. But there are also many use cases in the wider domain of computer science also described below.
+\subsection{Go}
+\cite{silver2017mastering}
+\subsection{Neural Networks and Machine Learning}
+\paragraph{Video Games} 
+\cite{guo2014deep} applies an UCT-algorithm \cite{kocsis2006bandit} to generate training data for classifiers combining reinforcement learning and deep learning. These classifiers are then used in AI for playing Atari video games. Concretely the emulator is accessed at a certain state yielding a deterministic Markov Decision Problem. This is then solved by UCT with 3 parameters: the number of trajectories, the maximum depth and an exploration constant. With these parameters the trajectories are simulated. Consider trajectory $k$...
+\todo{content}
+
+\cite{stanescu2016evaluating} compares various MCTS-variations with each other as well as other search algorithms with respect to their performance in Real Time Strategy (RTS) Games. The most notable example is the RTS-variant of MCTS presented by \cite{ontanon2013combinatorial} \todo{content x2}.
+\paragraph{Deep Learning Architectures}
+The problem of choosing the architecture of a neural network ... \cite{negrinho2017deeparchitect}.
+In deep learning, performance is strongly affected by the choice of architecture and hyperparameters. While there has been extensive work on automatic hyperparameter optimization for simple spaces, complex spaces such as the space of deep architectures remain largely unexplored. As a result, the choice of architecture is done manually by the human expert through a slow trial and error process guided mainly by intuition. In this paper we describe a framework for automatically designing and training deep models. We propose an extensible and modular language that allows the human expert to compactly represent complex search spaces over architectures and their hyperparameters. The resulting search spaces are tree-structured and therefore easy to traverse. Models can be automatically compiled to computational graphs once values for all hyperparameters have been chosen. We can leverage the structure of the search space to introduce different model search algorithms, such as random search, Monte Carlo tree search (MCTS), and sequential model-based optimization (SMBO). We present experiments comparing the different algorithms on CIFAR-10 and show that MCTS and SMBO outperform random search. In addition, these experiments show that our framework can be used effectively for model discovery, as it is possible to describe expressive search spaces and discover competitive models without much effort from the human expert. Code for our framework and experiments has been made publicly available.
+\todo{abstract, content}
+\cite{wang2019alphax}
+
+
+We present AlphaX, a fully automated agent that designs complex neural architectures from scratch. AlphaX ex- plores the search space with a distributed Monte Carlo Tree Search (MCTS) and a Meta-Deep Neural Network (DNN). MCTS guides transfer learning and intrinsically improves the search efficiency by dynamically balancing the explo- ration and exploitation at fine-grained states, while Meta- DNN predicts the network accuracy to guide the search, and to provide an estimated reward to speed up the rollout. As the search progresses, AlphaX also generates the training data for Meta-DNN. So, the learning of Meta-DNN is end- to-end. In 8 GPU days, AlphaX found an architecture that reaches 97.88\% top-1 accuracy on CIFAR-10, and 75.5\% top-1 accuracy on ImageNet. We also evaluate AlphaX on a large scale NAS dataset for reproducibility. On NASBench- 101, AlphaX also demonstrates 3x and 2.8x speedup over Random Search and Regularized Evolution in finding the global optimum. Finally, we show the searched architecture improves a variety of vision applications from Neural Style Transfer, to Image Captioning and Object Detection.
+\todo{abstract, content}
+\paragraph{Reinforcement Learning}
+\subsection{Others}
+\paragraph{Chemistry}
+\cite{yang2019concepts}
+\todo{delete}
+\paragraph{Databases}
+\cite{omondi2019monte} applies UCT to automatically tune configuration parameters of data bases. Previously these had to be manually analyzed and modified by system administrators as a reaction to environmental or runtime changes to avoid bottlenecks. 
+\todo{content}
