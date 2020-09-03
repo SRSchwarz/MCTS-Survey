@@ -1,48 +1,19 @@
-\documentclass{llncs}
+\input{sections/preamble}
 \begin{document}
 \title{A Survey on Monte Carlo Tree Search Methods}
-\author{Simon Schwarz}
-\institute{Karlsruhe Institute of Technology}
+\author{Simon Schwarz\thanks{Advisor: Yiran Huang}}
+\authorrunning{S. Schwarz}
+\institute{Chair For Pervasive Computing Systems -- TECO,\\Karlsruhe Institute of Technology}
 \maketitle
-\begin{abstract}dasdsad
-	\keywords{First keyword $\cdot$ Second keyword $\cdot$ Another keyword.}
+\begin{abstract}
+Monte Carlo Tree Search (MCTS) is a sampling-based, iterative search algorithm that is well known to address the exploration-exploitation tradeoff and was made famous in its application to the game Go. Its basic formulation works well in small or simple domains. However, applying it to specific use cases which have unique requirements (like real-time or cooperative scenarios) necessitates additional engineering. Consequently there has been a lot of research into extending MCTS to these new domains. This mainly concerns performance improvements, modifying the algorithm's components to leverage domain knowledge or through the use of heuristics. This survey presents notable examples of this research.
+\keywords{Monte Carlo Tree Search  \and MCTS \and UCB}
 \end{abstract}
-\section{First Section}
-\subsection{A Subsection Sample}
-Please note that the first paragraph of a section or subsection is
-not indented. The first paragraph that follows a table, figure,
-equation etc. does not need an indent, either.
-
-Subsequent paragraphs, however, are indented.
-
-\subsubsection{Sample Heading (Third Level)} Only two levels of
-headings should be numbered. Lower level headings remain unnumbered;
-they are formatted as run-in headings.
-
-\paragraph{Sample Heading (Fourth Level)}
-The contribution should contain no more than four levels of
-headings. Table~\ref{tab1} gives a summary of all heading levels.
-\begin{table}
-\caption{Table captions should be placed above the
-tables.}\label{tab1}
-\begin{tabular}{|l|l|l|}
-\hline
-Heading level &  Example & Font size and style\\
-\hline
-Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
-1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
-2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
-3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
-4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
-\hline
-\end{tabular}
-\end{table}
-\begin{equation}
-x + y = z
-\end{equation}
-\begin{theorem}
-This is a sample theorem. The run-in heading is set in bold, while
-the following text appears in italics. Definitions, lemmas,
-propositions, and corollaries are styled the same way.
-\end{theorem}
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/variations}
+\input{sections/use-cases}
+\input{sections/conclusion}
+\bibliographystyle{splncs04}
+\bibliography{literature}
 \end{document}
